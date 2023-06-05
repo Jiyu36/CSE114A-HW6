@@ -86,7 +86,7 @@ execExpr e = return (eval prelude e) `catch` exitError
 --------------------------------------------------------------------------------
 parse :: String -> Expr
 --------------------------------------------------------------------------------
-parse = parseExpr
+parse = parseString
 
 exitError :: Error -> IO Value
 exitError (Error msg) = return (VErr msg)
@@ -187,23 +187,14 @@ eval _ _ = throw (Error "type error: eval")
 evalOp :: Binop -> Value -> Value -> Value
 --------------------------------------------------------------------------------
 evalOp Plus (VInt e1) (VInt e2) = VInt (e1 + e2)
-evalOp Plus _ _ = throw (Error "type error: Plus")
 evalOp Minus (VInt e1) (VInt e2) = VInt (e1 - e2)
-evalOp Minus _ _ = throw (Error "type error: Minus")
 evalOp Mul (VInt e1) (VInt e2) = VInt (e1 * e2)
-evalOp Mul _ _ = throw (Error "type error: Mul")
 evalOp Eq e1 e2 = VBool (e1 == e2)
-evalOp Eq _ _ = throw (Error "type error: Eq")
 evalOp Ne e1 e2 = VBool (e1 /= e2)
-evalOp Ne _ _ = throw (Error "type error: Ne")
 evalOp Lt (VInt e1) (VInt e2) = VBool (e1 < e2)
-evalOp Lt _ _ = throw (Error "type error: Lt")
 evalOp Le (VInt e1) (VInt e2) = VBool (e1 <= e2)
-evalOp Le _ _ = throw (Error "type error: Le")
 evalOp And (VBool e1) (VBool e2) = VBool (e1 && e2)
-evalOp And _ _ = throw (Error "type error: And")
 evalOp Or (VBool e1) (VBool e2) = VBool (e1 || e2)
-evalOp Or _ _ = throw (Error "type error: Or")
 evalOp Cons (VInt e1) (VNil) = VPair (VInt e1) (VNil)
 evalOp Cons (VNil) (VInt e1) = VPair (VNil) (VInt e1)
 evalOp Cons (VInt e1) (VInt e2) = VPair (VInt e1) (VInt e2)
